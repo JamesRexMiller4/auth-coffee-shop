@@ -1,5 +1,6 @@
 #backend
 /backend/env
+/backend/src/__pycache__/
 /backend/src/__init__.pyc
 /backend/src/api.pyc
 /backend/src/auth/__init__.pyc
