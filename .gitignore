@@ -4,6 +4,8 @@
 /backend/src/__init__.pyc
 /backend/src/api.pyc
 /backend/src/auth/__init__.pyc
+/backend/src/database/__pycache__/
+/backend/src/auth/__pycache__/
 /backend/src/auth/auth.pyc
 /backend/src/database/__init__.pyc
 /backend/src/database/models.pyc
