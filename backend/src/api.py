@@ -129,6 +129,10 @@ def patch_drinks(jwt, drink_id):
 def delete_drink(jwt, drink_id):
     try:
         drink = Drink.query.filter_by(id=drink_id).one_or_none()
+
+        if drink is None:
+            abort(404)
+            
         drink.delete()
 
         return jsonify({
