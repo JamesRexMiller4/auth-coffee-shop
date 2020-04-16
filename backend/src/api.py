@@ -132,14 +132,13 @@ def delete_drink(jwt, drink_id):
 
         if drink is None:
             abort(404)
-            
+
         drink.delete()
 
         return jsonify({
             "success": True,
             "delete": drink_id
         })
-
     except:
         abort(422)
 
@@ -155,24 +154,18 @@ def unprocessable(error):
                     "message": "unprocessable"
                     }), 422
 
-'''
-@TODO implement error handlers using the @app.errorhandler(error) decorator
-    each error handler should return (with approprate messages):
-             jsonify({
-                    "success": False, 
-                    "error": 404,
-                    "message": "resource not found"
-                    }), 404
+@app.errorhandler(404)
+def not_found(error):
+    return (
+        jsonify({
+            "success": False,
+            "error": 404,
+            "message": "Resource not found."}),404,)
 
-'''
+@app.errorhandler(AuthError)
+def auth_error(error):
+    return jsonify({
+        "success": False,
+        "message": error.__dict__["error"]["description"]
+    }), error.__dict__["status_code"],
 
-'''
-@TODO implement error handler for 404
-    error handler should conform to general task above 
-'''
-
-
-'''
-@TODO implement error handler for AuthError
-    error handler should conform to general task above 
-'''
