@@ -61,8 +61,15 @@ def post_drinks(jwt):
         body = request.get_json()
         new_drink_title = body.get("title", None)
         new_drink_recipe = body.get("recipe", None)
+        
+        flag = isinstance(new_drink_recipe, list)
 
-        new_drink_recipe = json.dumps(new_drink_recipe)
+        if flag:
+            new_drink_recipe = json.dumps(new_drink_recipe)
+        else:
+            recipe_arr = []
+            recipe_arr.append(new_drink_recipe)
+            new_drink_recipe = json.dumps(recipe_arr)
 
         drink = Drink(title=new_drink_title, recipe=new_drink_recipe)
         drink.insert()
@@ -84,7 +91,7 @@ def patch_drinks(jwt, drink_id):
         new_recipe = body.get("recipe", None)
 
         drink = Drink.query.filter_by(id=drink_id).one_or_none()
-        print(drink)
+        
         if drink is None:
             abort(404)
 
@@ -139,6 +146,6 @@ def not_found(error):
 @app.errorhandler(AuthError)
 def auth_error(error):
     return (
-        jsonify({"success": False, "message": error.__dict__["error"]["description"]}),
+        jsonify({"success": False, "error": error.__dict__["status_code"],  "message": error.__dict__["error"]["description"]}),
         error.__dict__["status_code"],
     )
