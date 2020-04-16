@@ -47,7 +47,7 @@ def drinks_detail(jwt):
 
     if len(drinks) == 0:
         abort(404)
-        
+
     for drink in drinks:
         results.append(drink.long())
 
@@ -81,20 +81,38 @@ def post_drinks(jwt):
     except:
         abort(422)
 
+@app.route('/drinks/<int:drink_id>', methods=["PATCH"])
+@requires_auth('patch:drinks')
+def patch_drinks(jwt, drink_id):
+    try:
+        body = request.get_json()
+        new_title = body.get('title', None)
+        new_recipe = body.get('recipe', None)
 
+        drink = Drink.query.filter_by(id=drink_id).one_or_none()
+        print(drink)
+        if drink is None:
+            abort(404)
+        
+        if new_title and new_recipe:
+            drink.title = new_title
+            drink.recipe = new_recipe
+        elif new_title:
+            drink.title = new_title
+        elif new_recipe:
+            drink.recipe = new_recipe
+        else: 
+            abort(422)
 
-'''
-@TODO implement endpoint
-    PATCH /drinks/<id>
-        where <id> is the existing model id
-        it should respond with a 404 error if <id> is not found
-        it should update the corresponding row for <id>
-        it should require the 'patch:drinks' permission
-        it should contain the drink.long() data representation
-    returns status code 200 and json {"success": True, "drinks": drink} where drink an array containing only the updated drink
-        or appropriate status code indicating reason for failure
-'''
+        new_drink = Drink.query.filter_by(id=drink_id).one_or_none()
 
+        response = {
+            "success": True,
+            "drinks": [new_drink.long()]
+        }
+        return jsonify(response)
+    except:
+        abort(422)
 
 '''
 @TODO implement endpoint
