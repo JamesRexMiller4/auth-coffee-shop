@@ -29,7 +29,6 @@ def drinks():
     for drink in drinks:
         results.append(drink.short())
 
-
     response = {
         "success": True,
         "drinks": results
@@ -37,41 +36,45 @@ def drinks():
 
     return jsonify(response)
 
-
-'''
-@TODO implement endpoint
-    GET /drinks
-        it should be a public endpoint
-        it should contain only the drink.short() data representation
-    returns status code 200 and json {"success": True, "drinks": drinks} where drinks is the list of drinks
-        or appropriate status code indicating reason for failure
-'''
-
-
-'''
-@TODO implement endpoint
-    GET /drinks-detail
-        it should require the 'get:drinks-detail' permission
-        it should contain the drink.long() data representation
-    returns status code 200 and json {"success": True, "drinks": drinks} where drinks is the list of drinks
-        or appropriate status code indicating reason for failure
-'''
 @app.route('/drinks-detail')
 @requires_auth('get:drinks-detail')
-def drinks_details(jwt):
-    print(jwt)
+def drinks_detail(jwt):
     drinks = Drink.query.order_by(Drink.id).all()
-    return drinks
+    results = []
 
-'''
-@TODO implement endpoint
-    POST /drinks
-        it should create a new row in the drinks table
-        it should require the 'post:drinks' permission
-        it should contain the drink.long() data representation
-    returns status code 200 and json {"success": True, "drinks": drink} where drink an array containing only the newly created drink
-        or appropriate status code indicating reason for failure
-'''
+    for drink in drinks:
+        results.append(drink.long())
+
+
+    response = {
+        "success": True,
+        "drinks": results
+    }
+    return jsonify(response)
+
+@app.route('/drinks', methods=["POST"])
+@requires_auth('post:drinks')
+def post_drinks(jwt):
+    try:
+        body = request.get_json()
+        new_drink_title = body.get("title", None)
+        new_drink_recipe = body.get("recipe", None)
+        
+        new_drink_recipe = json.dumps(new_drink_recipe)
+
+        drink = Drink(title=new_drink_title, recipe=new_drink_recipe)
+        drink.insert()
+
+        new_drink = Drink.query.filter_by(title=new_drink_title).one_or_none()
+
+        response = {
+            "success": True,
+            "drinks": [new_drink.long()]
+        }
+        return jsonify(response)
+    except:
+        abort(422)
+
 
 
 '''
