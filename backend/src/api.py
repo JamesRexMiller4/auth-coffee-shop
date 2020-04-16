@@ -28,7 +28,7 @@ def drinks():
 
     if len(drinks) == 0:
         abort(404)
-        
+
     for drink in drinks:
         results.append(drink.short())
 
@@ -45,6 +45,9 @@ def drinks_detail(jwt):
     drinks = Drink.query.order_by(Drink.id).all()
     results = []
 
+    if len(drinks) == 0:
+        abort(404)
+        
     for drink in drinks:
         results.append(drink.long())
 
