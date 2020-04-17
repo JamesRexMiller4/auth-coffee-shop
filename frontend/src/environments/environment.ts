@@ -6,9 +6,9 @@ export const environment = {
   production: false,
   apiServerUrl: 'http://127.0.0.1:5000', // the running FLASK api server url
   auth0: {
-    url: 'bluejugcoffee.auth0.com', // the auth0 domain prefix
+    url: 'bluejugcoffee', // the auth0 domain prefix
     audience: 'bluejugcoffee', // the audience set for the auth0 app
     clientId: 'H4Ljq950n6onEZvmJbX6UVglEirICHLN', // the client id generated for the auth0 app
-    callbackURL: 'http://localhost:5000/login-details', // the base url of the running ionic application. 
+    callbackURL: 'http://localhost:8100', // the base url of the running ionic application. 
   }
 };
