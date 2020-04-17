@@ -15,6 +15,7 @@ AuthError Exception
 A standardized way to communicate auth failure modes
 """
 
+
 class AuthError(Exception):
     def __init__(self, error, status_code):
         self.error = error
@@ -59,6 +60,7 @@ def get_token_auth_header():
 
     token = parts[1]
     return token
+
 
 def check_permissions(permission, payload):
     if "permissions" not in payload:
