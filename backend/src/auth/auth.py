@@ -35,6 +35,7 @@ def get_token_auth_header():
         )
 
     parts = auth.split()
+    # check for "Bearer" in header
     if parts[0].lower() != "bearer":
         raise AuthError(
             {
@@ -43,7 +44,7 @@ def get_token_auth_header():
             },
             401,
         )
-
+    # check that token is comprised of Bearer + jwt
     elif len(parts) == 1:
         raise AuthError(
             {"code": "invalid_header", "description": "Token not found."}, 401
@@ -57,7 +58,7 @@ def get_token_auth_header():
             },
             401,
         )
-
+# Grab auth token, omitting the "Bearer"
     token = parts[1]
     return token
 
