@@ -146,6 +146,7 @@ def not_found(error):
 
 @app.errorhandler(AuthError)
 def auth_error(error):
+    # based on errors raised in auth.py file
     return (
         jsonify(
             {
